@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.home.NewsDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,7 +27,7 @@
             android:layout_margin="10dp"
             android:text="@string/title"
             android:textColor="#000000"
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintTop_toBottomOf="@+id/detail_image"
             tools:layout_editor_absoluteX="10dp" />
 
@@ -46,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="@string/time"
-            app:layout_constraintBottom_toBottomOf="@+id/source"
+            app:layout_constraintBottom_toBottomOf="@+id/textView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView2"
             app:layout_constraintTop_toTopOf="@+id/textView2" />
@@ -56,7 +57,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_marginBottom="50dp"
             android:justificationMode="inter_word"
             android:text="@string/textview"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,19 +67,49 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Click below to view Source"
+            android:layout_marginTop="30dp"
+            android:text="@string/click_below_to_view_source"
             app:layout_constraintStart_toStartOf="@+id/source"
             app:layout_constraintTop_toBottomOf="@+id/detail_title" />
+
 
         <TextView
             android:id="@+id/timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="TextView"
+            android:layout_margin="30dp"
+            android:text="@string/textview"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:backgroundTint="@color/grey"
+            android:clickable="true"
+            android:elevation="6dp"
+            android:tint="@color/red"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/ic_menu_share" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:backgroundTint="@color/grey"
+            android:clickable="true"
+            android:tint="@color/red"
+            android:elevation="6dp"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/share"
+            app:layout_constraintEnd_toStartOf="@+id/share"
+            app:layout_constraintTop_toTopOf="@+id/share"
+            app:srcCompat="@android:drawable/btn_star_big_on" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

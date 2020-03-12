@@ -15,6 +15,7 @@ import com.example.newsapp.R;
 import com.example.newsapp.constants.Keys;
 import com.example.newsapp.helper.Time;
 import com.example.newsapp.models.Article;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import java.text.ParseException;
@@ -46,6 +47,22 @@ public class NewsDetailActivity extends AppCompatActivity {
                 urlintent.setData(urlstr);
                 urlintent.setAction(Intent.ACTION_VIEW);
                 startActivity(urlintent);
+            }
+        });
+
+
+        FloatingActionButton share = (FloatingActionButton) findViewById(R.id.share);
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, article.getUrl());
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+
             }
         });
 

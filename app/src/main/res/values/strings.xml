@@ -21,4 +21,6 @@
     <string name="name">Name</string>
     <string name="time">Time</string>
     <string name="textview">TextView</string>
+    <string name="share">SHARE</string>
+    <string name="click_below_to_view_source">Click below to view Source</string>
 </resources>
