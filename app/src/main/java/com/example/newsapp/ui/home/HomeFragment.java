@@ -23,10 +23,19 @@ import com.example.newsapp.models.NewsModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class HomeFragment extends Fragment {
-    RecyclerView recyclerView;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
-    private HomeViewModel homeViewModel;
+import static android.content.Context.MODE_PRIVATE;
+
+public class HomeFragment extends Fragment {
+
+    RecyclerView  recyclerView;
+    HomeViewModel homeViewModel;
+
+    static final int READ_BLOCK_SIZE = 100;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -35,37 +44,42 @@ public class HomeFragment extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        /*final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
-
-
-
-
         recyclerView = root.findViewById(R.id.my_recycler_view);
+
+        if (API.isWifiConn || API.isMobileConn) {
+
+
+        } else {
+            try {
+                NewsModel newsModel = getModelFromString(readFromFile());
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
+                return root;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
 
         StringRequest stringRequest = new StringRequest(API.ALL_NEWS_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                GsonBuilder gsonBuilder = new GsonBuilder();
-                Gson gson = gsonBuilder.create();
-                NewsModel newsModel = gson.fromJson(response, NewsModel.class);
-
-                System.out.println(newsModel.toString());
+                NewsModel newsModel = getModelFromString(response);
+                //Stored value inside file
+                writeOnFile(response);
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
 
             }
-        }, new Response.ErrorListener() {
+        },  new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                NewsModel newsModel = getModelFromString(readFromFile());
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
                 System.out.println(error.toString());
+
             }
         });
 
@@ -73,8 +87,53 @@ public class HomeFragment extends Fragment {
         requestQueue.add(stringRequest);
 
 
-
-
         return root;
     }
+
+    public NewsModel getModelFromString(String response) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        return gson.fromJson(response, NewsModel.class);
+    }
+
+
+    public void writeOnFile (String response) {
+        try {
+            FileOutputStream fileout = getActivity().openFileOutput("offline.txt", MODE_PRIVATE);
+            OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
+            outputWriter.write(response);
+            outputWriter.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String readFromFile() {
+        //reading text from file
+        try {
+            FileInputStream fileIn = getActivity().openFileInput("offline.txt");
+            InputStreamReader InputRead= new InputStreamReader(fileIn);
+
+            char[] inputBuffer= new char[READ_BLOCK_SIZE];
+            String s="";
+            int charRead;
+
+            while ((charRead=InputRead.read(inputBuffer))>0) {
+                // char to string conversion
+                String readstring=String.copyValueOf(inputBuffer,0,charRead);
+                s +=readstring;
+            }
+            InputRead.close();
+            return s;
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
+
 }

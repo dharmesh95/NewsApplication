@@ -1,6 +1,7 @@
 package com.example.newsapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.newsapp.R;
+import com.example.newsapp.helper.Time;
 import com.example.newsapp.models.Article;
 import com.example.newsapp.models.NewsModel;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import com.example.newsapp.ui.home.NewsDetailActivity;
+import com.google.gson.Gson;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
@@ -50,10 +44,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         Glide
                 .with(context)
                 .load(article.getUrlToImage())
-                .into(myViewHolder.userImageView);
-        myViewHolder.usernameTextView.setText(article.getTitle());
+                .into(myViewHolder.image);
+        myViewHolder.title.setText(article.getTitle());
         myViewHolder.button.setText(article.getSource().getName());
-        myViewHolder.timeTextView.setText(String.valueOf(getDifference(article.getPublishedAt())));
+        myViewHolder.time.setText(Time.getDifference(article.getPublishedAt()));
     }
 
     @Override
@@ -61,51 +55,34 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         return newsModel.getArticles().size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView userImageView;
-        TextView  usernameTextView;
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView image;
+        TextView  title;
         Button    button;
-        TextView  timeTextView;
+        TextView  time;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            usernameTextView = itemView.findViewById(R.id.usernameTextView);
-            userImageView = itemView.findViewById(R.id.userImageView);
+            title = itemView.findViewById(R.id.title);
+            image = itemView.findViewById(R.id.userImageView);
             button = itemView.findViewById(R.id.button);
-            timeTextView = itemView.findViewById(R.id.time);
+            time = itemView.findViewById(R.id.time);
+
+            itemView.setOnClickListener(this); //title?
+        }
+
+        @Override
+        public void onClick(View v) {
+            Context context = v.getContext();
+            Intent intent = new Intent(context, NewsDetailActivity.class);
+
+            System.out.println("Article clicked : " + newsModel.getArticles().get(getAdapterPosition()).toString());
+
+            intent.putExtra("ARTICLE", new Gson().toJson(newsModel.getArticles().get(getAdapterPosition())));
+
+            context.startActivity(intent);
         }
     }
 
-    public String getDifference(String stringDate) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        Date now = new Date();
-        Date date = new Date();
-        try {
-            date = sdf.parse(stringDate.replaceAll("Z$", "+0000"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
-        LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        LocalDateTime nowDateTime = now.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
-        Duration duration = Duration.between(localDateTime, nowDateTime);
-
-        long days = duration.toDays();
-        if (days != 0) {
-            return days + " days ago";
-        }
-
-        long hrs = duration.toHours();
-        if (hrs != 0) {
-            return hrs + " hours ago";
-        }
-
-        long minutes = duration.toMinutes();
-        if (minutes != 0) {
-            return minutes + " minutes ago";
-        }
-
-        return "Few days ago";
-    }
 }

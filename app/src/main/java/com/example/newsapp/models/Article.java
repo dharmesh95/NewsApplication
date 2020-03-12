@@ -1,5 +1,7 @@
 package com.example.newsapp.models;
 
+import java.io.Serializable;
+
 public class Article {
 
     private Source source;
@@ -75,4 +77,17 @@ public class Article {
         this.content = content;
     }
 
+    @Override
+    public String toString() {
+        return "Article{" +
+                "source=" + source +
+                ", author='" + author + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", url='" + url + '\'' +
+                ", urlToImage='" + urlToImage + '\'' +
+                ", publishedAt='" + publishedAt + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }
