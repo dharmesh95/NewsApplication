@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.newsapp.R;
 import com.example.newsapp.adapter.MyAdapter;
 import com.example.newsapp.constants.API;
+import com.example.newsapp.helper.OfflineStore;
 import com.example.newsapp.models.Article;
 import com.example.newsapp.models.NewsModel;
 import com.google.gson.Gson;
@@ -55,7 +56,7 @@ public class PoliticsFragment extends Fragment {
 
         } else {
             try {
-                NewsModel newsModel = getModelFromString(readFromFile());
+                NewsModel newsModel = getModelFromString(OfflineStore.readFromFile("offline-politics.txt", getActivity()));
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
                 return root;
@@ -73,16 +74,16 @@ public class PoliticsFragment extends Fragment {
                         .collect(Collectors.<Article>toList());
                 newsModel.setArticles(articles);
                 //Stored value inside file
-                writeOnFile(response);
+                OfflineStore.writeOnFile(response, "offline-politics.txt", getActivity());
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
 
             }
-        },  new Response.ErrorListener() {
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                NewsModel newsModel = getModelFromString(readFromFile());
+                NewsModel newsModel = getModelFromString(OfflineStore.readFromFile("offline-politics.txt", getActivity()));
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
                 System.out.println(error.toString());
@@ -101,44 +102,6 @@ public class PoliticsFragment extends Fragment {
         GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
         return gson.fromJson(response, NewsModel.class);
-    }
-
-
-    public void writeOnFile (String response) {
-        try {
-            FileOutputStream fileout = getActivity().openFileOutput("offlinepolitics.txt", MODE_PRIVATE);
-            OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
-            outputWriter.write(response);
-            outputWriter.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public String readFromFile() {
-        //reading text from file
-        try {
-            FileInputStream fileIn = getActivity().openFileInput("offlinepolitics.txt");
-            InputStreamReader InputRead= new InputStreamReader(fileIn);
-
-            char[] inputBuffer= new char[READ_BLOCK_SIZE];
-            String s="";
-            int charRead;
-
-            while ((charRead=InputRead.read(inputBuffer))>0) {
-                // char to string conversion
-                String readstring=String.copyValueOf(inputBuffer,0,charRead);
-                s +=readstring;
-            }
-            InputRead.close();
-            return s;
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
 }

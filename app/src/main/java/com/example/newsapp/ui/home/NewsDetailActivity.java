@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.newsapp.R;
 import com.example.newsapp.constants.Keys;
+import com.example.newsapp.helper.OfflineStore;
 import com.example.newsapp.helper.Time;
 import com.example.newsapp.models.Article;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,29 +31,28 @@ public class NewsDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_detail);
 
         Gson gson = new Gson();
-        final Article article = gson.fromJson(getIntent().getStringExtra(Keys.ARTICLE), Article.class);
+        String articleJsonString = getIntent().getStringExtra(Keys.ARTICLE);
+        final Article article = gson.fromJson(articleJsonString, Article.class);
 
         ((TextView) findViewById(R.id.detail_title)).setText(article.getTitle());
         Glide.with(this).load(article.getUrlToImage()).into((ImageView) findViewById(R.id.detail_image));
 
-        Button source = (Button) findViewById(R.id.source);
+        Button source = findViewById(R.id.source);
         source.setText(article.getSource().getName());
-
         source.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String theurl = article.getUrl();
-                Uri urlstr = Uri.parse(theurl);
-                Intent urlintent = new Intent();
-                urlintent.setData(urlstr);
-                urlintent.setAction(Intent.ACTION_VIEW);
-                startActivity(urlintent);
+                String theUrl = article.getUrl();
+                Uri urlStr = Uri.parse(theUrl);
+                Intent urlIntent = new Intent();
+                urlIntent.setData(urlStr);
+                urlIntent.setAction(Intent.ACTION_VIEW);
+                startActivity(urlIntent);
             }
         });
 
 
-        FloatingActionButton share = (FloatingActionButton) findViewById(R.id.share);
-
+        FloatingActionButton share = findViewById(R.id.share);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +63,14 @@ public class NewsDetailActivity extends AppCompatActivity {
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
 
+            }
+        });
+
+        FloatingActionButton bookmark = findViewById(R.id.bookmark);
+        bookmark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OfflineStore.writeOnFile(articleJsonString, );
             }
         });
 
