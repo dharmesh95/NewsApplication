@@ -1,7 +1,5 @@
 package com.example.newsapp.models;
 
-import java.io.Serializable;
-
 public class Article {
 
     private Source source;

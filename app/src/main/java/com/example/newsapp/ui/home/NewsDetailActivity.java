@@ -12,9 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.newsapp.R;
+import com.example.newsapp.constants.Keys;
 import com.example.newsapp.helper.Time;
 import com.example.newsapp.models.Article;
 import com.google.gson.Gson;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class NewsDetailActivity extends AppCompatActivity {
 
@@ -24,7 +29,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_detail);
 
         Gson gson = new Gson();
-        final Article article = gson.fromJson(getIntent().getStringExtra("ARTICLE"), Article.class);
+        final Article article = gson.fromJson(getIntent().getStringExtra(Keys.ARTICLE), Article.class);
 
         ((TextView) findViewById(R.id.detail_title)).setText(article.getTitle());
         Glide.with(this).load(article.getUrlToImage()).into((ImageView) findViewById(R.id.detail_image));
@@ -46,5 +51,12 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.detail_time)).setText(Time.getDifference(article.getPublishedAt()));
         ((TextView) findViewById(R.id.description)).setText(article.getDescription());
+        ((TextView) findViewById(R.id.timestamp)).setText(formatDate(article.getPublishedAt()));
+    }
+
+    private String formatDate(String publishedAt) {
+        Date date = Time.getDate(publishedAt);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy");
+        return sdf.format(date);
     }
 }

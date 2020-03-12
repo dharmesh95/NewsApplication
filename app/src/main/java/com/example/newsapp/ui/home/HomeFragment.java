@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment {
             public void onResponse(String response) {
 
                 NewsModel newsModel = getModelFromString(response);
-                //Stored value inside file
+                //Stored value inside fi
                 writeOnFile(response);
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

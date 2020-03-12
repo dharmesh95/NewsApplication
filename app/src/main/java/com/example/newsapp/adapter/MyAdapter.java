@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.newsapp.R;
+import com.example.newsapp.constants.Keys;
 import com.example.newsapp.helper.Time;
 import com.example.newsapp.models.Article;
 import com.example.newsapp.models.NewsModel;
@@ -22,7 +23,7 @@ import com.google.gson.Gson;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
-    Context   context;
+    Context context;
     NewsModel newsModel;
 
     public MyAdapter(Context context, NewsModel newsModel) {
@@ -57,9 +58,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView image;
-        TextView  title;
-        Button    button;
-        TextView  time;
+        TextView title;
+        Button button;
+        TextView time;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,7 +79,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
             System.out.println("Article clicked : " + newsModel.getArticles().get(getAdapterPosition()).toString());
 
-            intent.putExtra("ARTICLE", new Gson().toJson(newsModel.getArticles().get(getAdapterPosition())));
+            intent.putExtra(Keys.ARTICLE, new Gson().toJson(newsModel.getArticles().get(getAdapterPosition())));
 
             context.startActivity(intent);
         }
