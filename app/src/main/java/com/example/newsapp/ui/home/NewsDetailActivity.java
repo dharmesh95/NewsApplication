@@ -44,6 +44,22 @@ public class NewsDetailActivity extends AppCompatActivity {
             }
         });
 
+
+        Button share = (Button) findViewById(R.id.share);
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, article.getUrl());
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+
+            }
+        });
+
         ((TextView) findViewById(R.id.detail_time)).setText(Time.getDifference(article.getPublishedAt()));
         ((TextView) findViewById(R.id.description)).setText(article.getDescription());
     }
