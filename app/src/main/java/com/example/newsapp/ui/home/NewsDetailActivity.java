@@ -70,7 +70,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         bookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfflineStore.writeOnFile(articleJsonString, );
+                // TODO add bookmark 
             }
         });
 
