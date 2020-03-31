@@ -25,6 +25,18 @@ public class OfflineStore {
         }
     }
 
+    public static void appendOnFile(String response, String fileName, FragmentActivity activity) {
+        try {
+            FileOutputStream fileout = activity.openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
+            outputWriter.append(response);
+            outputWriter.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String readFromFile(String fileName, FragmentActivity activity) {
         //reading text from file
         try {

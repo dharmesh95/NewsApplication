@@ -19,7 +19,6 @@ import com.example.newsapp.models.Article;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -39,40 +38,28 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         Button source = findViewById(R.id.source);
         source.setText(article.getSource().getName());
-        source.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String theUrl = article.getUrl();
-                Uri urlStr = Uri.parse(theUrl);
-                Intent urlIntent = new Intent();
-                urlIntent.setData(urlStr);
-                urlIntent.setAction(Intent.ACTION_VIEW);
-                startActivity(urlIntent);
-            }
+        source.setOnClickListener(v -> {
+            String theUrl = article.getUrl();
+            Uri urlStr = Uri.parse(theUrl);
+            Intent urlIntent = new Intent();
+            urlIntent.setData(urlStr);
+            urlIntent.setAction(Intent.ACTION_VIEW);
+            startActivity(urlIntent);
         });
 
-
         FloatingActionButton share = findViewById(R.id.share);
-        share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        share.setOnClickListener(v -> {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, article.getUrl());
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
 
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, article.getUrl());
-                sendIntent.setType("text/plain");
-                startActivity(sendIntent);
-
-            }
         });
 
         FloatingActionButton bookmark = findViewById(R.id.bookmark);
-        bookmark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO add bookmark 
-            }
-        });
+        NewsDetailActivity newsDetailActivity = this;
+        bookmark.setOnClickListener(v -> OfflineStore.appendOnFile(new Gson().toJson(bookmark) + "|", "bookmarks.txt", newsDetailActivity));
 
         ((TextView) findViewById(R.id.detail_time)).setText(Time.getDifference(article.getPublishedAt()));
         ((TextView) findViewById(R.id.description)).setText(article.getDescription());
