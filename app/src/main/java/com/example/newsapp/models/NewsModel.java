@@ -5,9 +5,15 @@ import java.util.List;
 
 public class NewsModel {
 
-    private String status;
-    private Integer totalResults;
+    private String        status;
+    private Integer       totalResults;
     private List<Article> articles = null;
+
+
+    public NewsModel(List<Article> articles) {
+        this.articles = articles;
+        this.totalResults = articles == null ? 0 : articles.size();
+    }
 
     public String getStatus() {
         return status;

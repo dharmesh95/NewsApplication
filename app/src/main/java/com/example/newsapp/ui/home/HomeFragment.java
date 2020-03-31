@@ -64,7 +64,6 @@ public class HomeFragment extends Fragment {
             NewsModel newsModel = getModelFromString(OfflineStore.readFromFile("offline.txt", getActivity()));
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
-            System.out.println(error.toString());
 
         });
 

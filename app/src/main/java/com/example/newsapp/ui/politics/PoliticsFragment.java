@@ -73,7 +73,6 @@ public class PoliticsFragment extends Fragment {
             NewsModel newsModel = getModelFromString(OfflineStore.readFromFile("offline-politics.txt", getActivity()));
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
-            System.out.println(error.toString());
         });
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());

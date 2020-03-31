@@ -72,7 +72,6 @@ public class SportsFragment extends Fragment {
             NewsModel newsModel = getModelFromString(OfflineStore.readFromFile("offline-sports.txt", getActivity()));
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
-            System.out.println(error.toString());
 
         });
 

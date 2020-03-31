@@ -3,7 +3,6 @@ package com.example.newsapp.ui.home;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,9 +56,9 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         });
 
-        FloatingActionButton bookmark = findViewById(R.id.bookmark);
+        FloatingActionButton bookmarkButton = findViewById(R.id.bookmark);
         NewsDetailActivity newsDetailActivity = this;
-        bookmark.setOnClickListener(v -> OfflineStore.appendOnFile(new Gson().toJson(bookmark) + "|", "bookmarks.txt", newsDetailActivity));
+        bookmarkButton.setOnClickListener(v -> OfflineStore.appendOnFile((new Gson().toJson(article)) + OfflineStore.BOOKMARKS_SEPARATOR, "bookmarks.txt", newsDetailActivity));
 
         ((TextView) findViewById(R.id.detail_time)).setText(Time.getDifference(article.getPublishedAt()));
         ((TextView) findViewById(R.id.description)).setText(article.getDescription());

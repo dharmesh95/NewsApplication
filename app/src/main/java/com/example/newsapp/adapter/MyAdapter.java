@@ -79,8 +79,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             Context context = v.getContext();
             Intent intent = new Intent(context, NewsDetailActivity.class);
 
-            System.out.println("Article clicked : " + newsModel.getArticles().get(getAdapterPosition()).toString());
-
             intent.putExtra(Keys.ARTICLE, new Gson().toJson(newsModel.getArticles().get(getAdapterPosition())));
 
             context.startActivity(intent);

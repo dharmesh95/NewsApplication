@@ -13,13 +13,14 @@ public class OfflineStore {
 
     static final int READ_BLOCK_SIZE = 100;
 
+    public static final String BOOKMARKS_SEPARATOR = "~A~";
+
     public static void writeOnFile(String response, String fileName, FragmentActivity activity) {
         try {
-            FileOutputStream fileout = activity.openFileOutput(fileName, Context.MODE_PRIVATE);
-            OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
+            FileOutputStream fileOutput = activity.openFileOutput(fileName, Context.MODE_PRIVATE);
+            OutputStreamWriter outputWriter = new OutputStreamWriter(fileOutput);
             outputWriter.write(response);
             outputWriter.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,11 +28,10 @@ public class OfflineStore {
 
     public static void appendOnFile(String response, String fileName, FragmentActivity activity) {
         try {
-            FileOutputStream fileout = activity.openFileOutput(fileName, Context.MODE_PRIVATE);
-            OutputStreamWriter outputWriter = new OutputStreamWriter(fileout);
+            FileOutputStream fileOutput = activity.openFileOutput(fileName, Context.MODE_APPEND);
+            OutputStreamWriter outputWriter = new OutputStreamWriter(fileOutput);
             outputWriter.append(response);
             outputWriter.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,22 +40,20 @@ public class OfflineStore {
     public static String readFromFile(String fileName, FragmentActivity activity) {
         //reading text from file
         try {
-            FileInputStream fileIn = activity.openFileInput(fileName);
-            InputStreamReader InputRead = new InputStreamReader(fileIn);
+            FileInputStream fileInput = activity.openFileInput(fileName);
+            InputStreamReader inputReader = new InputStreamReader(fileInput);
 
             char[] inputBuffer = new char[READ_BLOCK_SIZE];
             String s = "";
             int charRead;
 
-            while ((charRead = InputRead.read(inputBuffer)) > 0) {
+            while ((charRead = inputReader.read(inputBuffer)) > 0) {
                 // char to string conversion
                 String readString = String.copyValueOf(inputBuffer, 0, charRead);
                 s += readString;
             }
-            InputRead.close();
+            inputReader.close();
             return s;
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
