@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.newsapp.R;
@@ -23,13 +21,6 @@ import com.example.newsapp.helper.OfflineStore;
 import com.example.newsapp.models.NewsModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class HomeFragment extends Fragment {
 
@@ -60,27 +51,21 @@ public class HomeFragment extends Fragment {
             }
         }
 
-        StringRequest stringRequest = new StringRequest(API.ALL_NEWS_URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        StringRequest stringRequest = new StringRequest(API.ALL_NEWS_URL, response -> {
 
-                NewsModel newsModel = getModelFromString(response);
-                //Stored value inside fi
-                OfflineStore.writeOnFile(response, "offline.txt", getActivity());
+            NewsModel newsModel = getModelFromString(response);
+            //Stored value inside fi
+            OfflineStore.writeOnFile(response, "offline.txt", getActivity());
 
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                NewsModel newsModel = getModelFromString(OfflineStore.readFromFile("offline.txt", getActivity()));
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
-                System.out.println(error.toString());
+        }, error -> {
+            NewsModel newsModel = getModelFromString(OfflineStore.readFromFile("offline.txt", getActivity()));
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(new MyAdapter(getActivity(), newsModel));
+            System.out.println(error.toString());
 
-            }
         });
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());

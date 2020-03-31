@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
-    Context context;
+    Context   context;
     NewsModel newsModel;
 
     public MyAdapter(Context context, NewsModel newsModel) {
@@ -53,14 +53,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     @Override
     public int getItemCount() {
+        if (null == newsModel)
+            return 20;
         return newsModel.getArticles().size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView image;
-        TextView title;
-        Button button;
-        TextView time;
+        TextView  title;
+        Button    button;
+        TextView  time;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
